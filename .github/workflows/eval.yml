@@ -6,14 +6,12 @@ on:
 jobs:
   evaluate:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 300        # 30 instances needs ~2-3 hrs
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
@@ -25,13 +23,13 @@ jobs:
           python -m swebench.harness.run_evaluation \
             --dataset_name princeton-nlp/SWE-bench \
             --predictions_path preds.jsonl \
-            --max_workers 1 \
-            --run_id cli_agent_v1
+            --max_workers 4 \
+            --run_id cli_agent_30_v1
 
       - name: Upload results
         uses: actions/upload-artifact@v4
         with:
-          name: eval-results
+          name: eval-results-30
           path: |
             logs/
             *.json
